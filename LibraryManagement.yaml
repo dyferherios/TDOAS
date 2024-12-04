@@ -1,8 +1,11 @@
 openapi: 3.0.0
+servers:
+  - url: https://virtserver.swaggerhub.com/HEIFREDDY2/LibraryManagement/1.0.0
 info:
   title: Library Management API
   description: API for managing books and authors in a library.
   version: 1.0.0
+
 paths:
   /books:
     get:
@@ -115,7 +118,6 @@ paths:
       responses:
         '204':
           description: Author deleted
-
 
 components:
   schemas:

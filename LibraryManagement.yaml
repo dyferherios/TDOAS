@@ -7,6 +7,19 @@ paths:
   /books:
     get:
       summary: Get a list of books
+      parameters:
+        - in: query
+          name: bookName
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: releaseDate
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2020-01-01"
       responses:
         '200':
           description: A list of books
@@ -49,7 +62,6 @@ paths:
       responses:
         '204':
           description: Book deleted
-
 components:
   schemas:
     Book:

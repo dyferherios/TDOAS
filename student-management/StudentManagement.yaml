@@ -1,0 +1,167 @@
+openapi: 3.0.0
+info:
+  title: Library Management API
+  description: API for managing books and authors in a library.
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEIFREDDY2/StudentManagement/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /students:
+    get:
+      summary: Get a list of students
+      parameters:
+      - name: studentName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: reference
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: string
+      responses:
+        "200":
+          description: A list of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+    put:
+      summary: Update an existing student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        "200":
+          description: Student updated
+    post:
+      summary: Create a new student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+        required: true
+      responses:
+        "201":
+          description: Student created
+    delete:
+      summary: Delete a student
+      parameters:
+      - name: reference
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Student deleted
+  /group:
+    get:
+      summary: Get a list of group
+      parameters:
+      - name: groupName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: promotion
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A list of group
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+    put:
+      summary: Update an existing group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      responses:
+        "200":
+          description: Author group
+    post:
+      summary: Create a new group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      responses:
+        "201":
+          description: Group created
+    delete:
+      summary: Delete an group
+      parameters:
+      - name: groupName
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Author deleted
+components:
+  schemas:
+    Student:
+      type: object
+      properties:
+        name:
+          type: string
+        sex:
+          type: string
+        birthdate:
+          type: string
+          format: date
+        reference:
+          type: string
+        group:
+          type: Group
+    Group:
+      type: object
+      properties:
+        name:
+          type: string
+        year:
+          type: string
+          format: date
+        promotion:
+          type: string
+          enum:
+          - G
+          - H
+          - J
+          - K
+        effective:
+          type: integer

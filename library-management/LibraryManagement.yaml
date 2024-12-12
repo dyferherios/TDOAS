@@ -1,0 +1,174 @@
+openapi: 3.0.0
+info:
+  title: Library Management API
+  description: API for managing books and authors in a library.
+  version: 1.1.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEIFREDDY2/oas-td1-std23097/1.1.0
+  description: SwaggerHub API Auto Mocking
+- url: https://virtserver.swaggerhub.com/HEIFREDDY2/LibraryManagement/1.0.0
+paths:
+  /books:
+    get:
+      summary: Get a list of books
+      parameters:
+      - name: bookName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: releaseDate
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: date
+          example: 2020-01-01
+      responses:
+        "200":
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    put:
+      summary: Update an existing book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrupdateBook'
+        required: true
+      responses:
+        "200":
+          description: Book updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+    post:
+      summary: Create a new book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrupdateBook'
+        required: true
+      responses:
+        "201":
+          description: Book created
+    delete:
+      summary: Delete a book
+      parameters:
+      - name: bookId
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Book deleted
+  /authors:
+    get:
+      summary: Get a list of authors
+      parameters:
+      - name: authorName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A list of authors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Author'
+    put:
+      summary: Update an existing author
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        required: true
+      responses:
+        "200":
+          description: Author updated
+    post:
+      summary: Create a new author
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        required: true
+      responses:
+        "201":
+          description: Author created
+    delete:
+      summary: Delete an author
+      parameters:
+      - name: authorId
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Author deleted
+components:
+  schemas:
+    CrupdateBook:
+      type: object
+      properties:
+        id:
+          type: string
+        bookName:
+          type: string
+        pageNumbers:
+          type: integer
+        topic:
+          type: string
+          enum:
+          - ROMANCE
+          - COMEDY
+          - OTHER
+        releaseDate:
+          type: string
+          format: date
+    Book:
+      type: object
+      properties:
+        author:
+          type: object
+          description: Author is initially null for newly created books.
+          nullable: true
+      allOf:
+      - $ref: '#/components/schemas/CrupdateBook'
+    Author:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+          - M
+          - F

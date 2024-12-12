@@ -1,0 +1,188 @@
+openapi: 3.0.0
+info:
+  title: Library Management API
+  description: API for managing books and authors in a library.
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEIFREDDY2/StudentManagement/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /students:
+    get:
+      summary: Get a list of students
+      operationId: getStudents
+      parameters:
+      - name: studentName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: reference
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: string
+      responses:
+        "200":
+          description: A list of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+    put:
+      summary: Update an existing student
+      operationId: updateStudent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        "200":
+          description: Student updated
+    post:
+      summary: Create a new student
+      operationId: createStudent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        "201":
+          description: Student created
+    delete:
+      summary: Delete a student
+      parameters:
+      - name: reference
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Student deleted
+  /groups:
+    get:
+      summary: Get a list of groups
+      operationId: getGroup
+      parameters:
+      - name: groupName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: promotion
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A list of groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+    put:
+      summary: Update an existing group
+      operationId: updateGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroup'
+        required: true
+      responses:
+        "200":
+          description: Group updated
+    post:
+      summary: Create a new group
+      operationId: createGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroup'
+        required: true
+      responses:
+        "201":
+          description: Group created
+    delete:
+      summary: Delete a group
+      parameters:
+      - name: groupName
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Group deleted
+components:
+  schemas:
+    CreateStudent:
+      type: object
+      properties:
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+          - Male
+          - Female
+        birthdate:
+          type: string
+          format: date
+        reference:
+          type: string
+        group:
+          $ref: '#/components/schemas/CreateGroup'
+    Student:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/CreateStudent'
+    CreateGroup:
+      type: object
+      properties:
+        name:
+          type: string
+        year:
+          type: string
+          format: date
+        promotion:
+          type: string
+          enum:
+          - G
+          - H
+          - J
+          - K
+        effective:
+          type: integer
+    Group:
+      properties:
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateStudent'
+      allOf:
+      - $ref: '#/components/schemas/CreateGroup'

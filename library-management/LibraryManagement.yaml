@@ -35,7 +35,7 @@ paths:
         explode: true
         schema:
           type: number
-          example: 1
+          default: 1
       - name: pageSize
         in: query
         required: false
@@ -43,7 +43,7 @@ paths:
         explode: true
         schema:
           type: number
-          example: 50
+          default: 50
       responses:
         "200":
           description: A list of books
@@ -139,6 +139,22 @@ paths:
         explode: true
         schema:
           type: string
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          default: 1
+      - name: pageSize
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          default: 50
       responses:
         "200":
           description: A list of authors

@@ -28,6 +28,22 @@ paths:
           type: string
           format: date
           example: 2020-01-01
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          example: 1
+      - name: pageSize
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+          example: 50
       responses:
         "200":
           description: A list of books
@@ -124,18 +140,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Author'
-    put:
-      summary: Update an existing author
-      operationId: updateAuthor
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Author'
-        required: true
-      responses:
-        "200":
-          description: Author updated
     post:
       summary: Create a new author
       operationId: createAuthor
@@ -148,20 +152,6 @@ paths:
       responses:
         "201":
           description: Author created
-    delete:
-      summary: Delete an author
-      operationId: deleteAuthor
-      parameters:
-      - name: authorId
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-      responses:
-        "204":
-          description: Author deleted
 components:
   schemas:
     CrupdateBook:
@@ -182,6 +172,13 @@ components:
         releaseDate:
           type: string
           format: date
+    UpdateBookAuthor:
+      type: object
+      properties:
+        bookId:
+          type: string
+        authorId:
+          type: string
     Book:
       type: object
       properties:
@@ -203,10 +200,3 @@ components:
           enum:
           - M
           - F
-    UpdateBookAuthor:
-      type: object
-      properties:
-        bookId:
-          type: string
-        authorId:
-          type: string

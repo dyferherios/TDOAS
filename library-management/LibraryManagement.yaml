@@ -6,11 +6,11 @@ info:
 servers:
 - url: https://virtserver.swaggerhub.com/HEIFREDDY2/oas-td1-std23097/1.1.0
   description: SwaggerHub API Auto Mocking
-- url: https://virtserver.swaggerhub.com/HEIFREDDY2/LibraryManagement/1.0.0
 paths:
   /books:
     get:
       summary: Get a list of books
+      operationId: getAllBooks
       parameters:
       - name: bookName
         in: query
@@ -39,6 +39,7 @@ paths:
                   $ref: '#/components/schemas/Book'
     put:
       summary: Update an existing book
+      operationId: updateBook
       requestBody:
         content:
           application/json:
@@ -54,6 +55,7 @@ paths:
                 $ref: '#/components/schemas/Book'
     post:
       summary: Create a new book
+      operationId: createBook
       requestBody:
         content:
           application/json:
@@ -65,6 +67,7 @@ paths:
           description: Book created
     delete:
       summary: Delete a book
+      operationId: deleteAuthor
       parameters:
       - name: bookId
         in: query
@@ -76,9 +79,34 @@ paths:
       responses:
         "204":
           description: Book deleted
+  /books/{bookId}/authors/{authorId}:
+    put:
+      summary: Associate an author with a book
+      operationId: updateBookAuthor
+      parameters:
+      - name: bookId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: authorId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successfully associated the author with the book
+        "404":
+          description: Book or Author not found
   /authors:
     get:
       summary: Get a list of authors
+      operationId: getAllAuthors
       parameters:
       - name: authorName
         in: query
@@ -98,6 +126,7 @@ paths:
                   $ref: '#/components/schemas/Author'
     put:
       summary: Update an existing author
+      operationId: updateAuthor
       requestBody:
         content:
           application/json:
@@ -109,6 +138,7 @@ paths:
           description: Author updated
     post:
       summary: Create a new author
+      operationId: createAuthor
       requestBody:
         content:
           application/json:
@@ -120,6 +150,7 @@ paths:
           description: Author created
     delete:
       summary: Delete an author
+      operationId: deleteAuthor
       parameters:
       - name: authorId
         in: query
@@ -172,3 +203,10 @@ components:
           enum:
           - M
           - F
+    UpdateBookAuthor:
+      type: object
+      properties:
+        bookId:
+          type: string
+        authorId:
+          type: string

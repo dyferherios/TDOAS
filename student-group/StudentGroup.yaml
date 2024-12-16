@@ -1,0 +1,283 @@
+openapi: 3.0.0
+info:
+  title: Library Management API
+  description: API for managing student and group.
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/HEIFREDDY2/StudentAndGroup/1.0.0
+paths:
+  /students:
+    get:
+      summary: Get a list of students
+      operationId: getStudents
+      parameters:
+      - name: studentName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: reference
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: string
+      responses:
+        "200":
+          description: A list of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+    put:
+      summary: Update an existing student
+      operationId: updateStudent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        "200":
+          description: Student updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateStudent'
+    post:
+      summary: Create a new student
+      operationId: createStudent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        "201":
+          description: Student created
+    delete:
+      summary: Delete a student
+      parameters:
+      - name: reference
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Student deleted
+  /groups:
+    get:
+      summary: Get a list of groups
+      operationId: getGroup
+      parameters:
+      - name: groupName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: promotion
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: A list of groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+    put:
+      summary: Update an existing group
+      operationId: updateGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroup'
+        required: true
+      responses:
+        "200":
+          description: Group updated
+    post:
+      summary: Create a new group
+      operationId: createGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroup'
+        required: true
+      responses:
+        "201":
+          description: Group created
+    delete:
+      summary: Delete a group
+      parameters:
+      - name: groupName
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Group deleted
+  /students/{studentId}/group:
+    put:
+      summary: Update student group
+      operationId: putStudentGroup
+      parameters:
+      - name: studentId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStudent'
+        required: true
+      responses:
+        "204":
+          description: Updated student group succefully
+          content:
+            application/list:
+              schema:
+                $ref: '#/components/schemas/Student'
+  /students/group:
+    put:
+      summary: Update many student group at the same time
+      operationId: updateOneMoreStudentGroup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentGroupUpdate'
+        required: true
+      responses:
+        "204":
+          description: Same student group updated successfully
+  /students/{studentId}/groups/{groupId}:
+    put:
+      summary: Update student group with a specific id
+      operationId: updateStundentGroupWithSpecificId
+      parameters:
+      - name: studentId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: groupId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/groups_groupId_body'
+        required: true
+      responses:
+        "204":
+          description: UUpdated student group with a specific id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+components:
+  schemas:
+    CreateStudent:
+      type: object
+      properties:
+        name:
+          type: string
+        sex:
+          type: string
+          enum:
+          - Male
+          - Female
+        birthdate:
+          type: string
+          format: date
+        reference:
+          type: string
+    Student:
+      type: object
+      properties:
+        studentId:
+          type: string
+        group:
+          $ref: '#/components/schemas/CreateGroup'
+      allOf:
+      - $ref: '#/components/schemas/CreateStudent'
+    CreateGroup:
+      type: object
+      properties:
+        name:
+          type: string
+        year:
+          type: string
+          format: date
+        promotion:
+          type: string
+          enum:
+          - G
+          - H
+          - J
+          - K
+        effective:
+          type: integer
+    Group:
+      properties:
+        groupId:
+          type: string
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/Student'
+      allOf:
+      - $ref: '#/components/schemas/CreateGroup'
+    StudentGroupUpdate:
+      type: object
+      properties:
+        group:
+          $ref: '#/components/schemas/Group'
+    groups_groupId_body:
+      required:
+      - groupId
+      - studentId
+      type: object
+      properties:
+        studentId:
+          type: string
+        groupId:
+          type: string
